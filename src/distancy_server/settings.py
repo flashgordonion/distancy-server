@@ -94,7 +94,10 @@ DATABASES = {
         'PORT': os.environ['SQL_PORT'],
         'NAME': os.environ['SQL_DB'],
         'USER': os.environ['SQL_USER'],
-        'PASSWORD': os.environ['SQL_PASSWORD']
+        'PASSWORD': os.environ['SQL_PASSWORD'],
+        'OPTIONS': {
+            'ssl': {'ca': os.environ['SQL_SSL_CA_PATH']}
+        }
     }
 }
 

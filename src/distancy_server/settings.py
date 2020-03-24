@@ -95,12 +95,15 @@ DATABASES = {
         'NAME': os.environ['SQL_DB'],
         'USER': os.environ['SQL_USER'],
         'PASSWORD': os.environ['SQL_PASSWORD'],
-        'OPTIONS': {
-            'ssl': {'ca': os.environ['SQL_SSL_CA_PATH']}
-        }
+        'OPTIONS': {}
     }
 }
+# Enable SSL connection to DB via SSL if supported
+if 'SQL_SSL_CA_PATH' in os.environ:
+    DATABASES['OPTIONS']['ssl'] = {'ca': os.environ['SQL_SSL_CA_PATH']}
 
+# https://docs.djangoproject.com/en/2.2/topics/auth/customizing/#substituting-a-custom-user-model
+AUTH_USER_MODEL = 'distancy_server.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators

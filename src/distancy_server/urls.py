@@ -20,6 +20,8 @@ from distancy_server import views
 
 router = SimpleRouter()
 router.register('storeCapacityConfig', views.StoreCapacityConfigViewSet)
+router.register('store', views.StoreViewSet)
+router.register('reservation', views.ReservationViewSet, basename='reservation')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

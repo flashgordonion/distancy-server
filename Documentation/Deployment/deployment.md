@@ -10,4 +10,6 @@
 - SQL_DB - Name of Database
 - SQL_USER - User of the DB to connect as
 - SQL_PASSWORD - Password of the User to connect as
-- SQL_SSL_CA_PATH - Path of the CA certificate to establish the SSL connection
+- (Optional) SQL_SSL_CA_PATH - 
+    - Path of the CA certificate to establish the SSL connection
+    - If specified DB connection will be SSL 

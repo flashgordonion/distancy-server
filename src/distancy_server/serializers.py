@@ -2,6 +2,12 @@ from rest_framework import serializers
 from distancy_server import models
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.User
+        fields = ['username']
+
+
 class StoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Store

@@ -1,4 +1,11 @@
 from django.db import models
+from django.conf import settings
+from django.contrib.auth.models import AbstractUser
+from datetime import datetime
+
+
+class User(AbstractUser):
+    pass
 
 
 class Store(models.Model):
@@ -20,5 +27,7 @@ class StoreCapacityConfig(models.Model):
 
 
 class Reservation(models.Model):
-    pass
+    store = models.ForeignKey('Store', on_delete=models.CASCADE, null=False, blank=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False, blank=False)
+    slot_time = models.DateTimeField(null=False, blank=False, default=datetime.now())
 

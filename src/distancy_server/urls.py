@@ -15,14 +15,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework.urls import url
 from rest_framework.routers import SimpleRouter
+from rest_framework.authtoken import views as auth_views
 from distancy_server import views
+
 
 router = SimpleRouter()
 router.register('storeCapacityConfig', views.StoreCapacityConfigViewSet)
+router.register('store', views.StoreViewSet)
+router.register('reservation', views.ReservationViewSet, basename='reservation')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url(r'^api-token-auth/', auth_views.obtain_auth_token),
+    url(r'^api-token-verification/', views.TokenValidationView.as_view()),
+    url(r'^searchReservations/', views.ReservationSearch.as_view())
 ]
 
 urlpatterns.extend(router.urls)

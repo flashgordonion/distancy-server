@@ -7,6 +7,25 @@ from distancy_server import serializers
 from distancy_server import models
 
 
+class ReservationSearch(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+
+        openSlots = {
+            'TODO 1': 'Filter Reservations Matching Store',
+            'TODO 2': 'Filter Reservations Starting after Start Time',
+            'TODO 3': 'FROM QUERY Params determine end time',
+            'TODO 4': 'Filter Reservations before end time',
+            'TODO 5': 'Apply a list Serializer to limit the number of records',
+            'TODO 5a': 'limit date range to 1 day to prevent overfetching',
+            'TODO 6': 'PHASE 2: paginate results when people select a wide swath'
+        }
+        # Select all where matching store and
+
+        return Response(openSlots)
+
+
 class TokenValidationView(APIView):
     permission_classes = [IsAuthenticated]
 

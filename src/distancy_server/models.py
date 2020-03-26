@@ -9,11 +9,11 @@ class User(AbstractUser):
 
 
 class Store(models.Model):
-    store_name = models.CharField(max_length=511)
-    street_address = models.CharField(max_length=511)
-    city = models.CharField(max_length=255)
-    state = models.CharField(max_length=255)
-    zip_code = models.CharField(max_length=255)
+    store_name = models.CharField(max_length=511, db_index=True)
+    street_address = models.CharField(max_length=511, db_index=True)
+    city = models.CharField(max_length=255, db_index=True)
+    state = models.CharField(max_length=255, db_index=True)
+    zip_code = models.CharField(max_length=255, db_index=True)
 
 
 class StoreCapacityConfig(models.Model):
@@ -29,4 +29,5 @@ class StoreCapacityConfig(models.Model):
 class Reservation(models.Model):
     store = models.ForeignKey('Store', on_delete=models.CASCADE, null=False, blank=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False, blank=False)
-    slot_time = models.DateTimeField(null=False, blank=False, default=datetime.now())
+    slot_time = models.DateTimeField(null=False, blank=False, db_index=True)
+    slot_time_end = models.DateTimeField(null=False, blank=False, db_index=True)

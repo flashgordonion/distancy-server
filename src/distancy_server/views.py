@@ -1,6 +1,7 @@
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.views import APIView
 from rest_framework import mixins
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from distancy_server import serializers
@@ -17,8 +18,7 @@ class ReservationSearch(APIView):
         qp = request.data
 
         if 'store_id' not in qp:
-            # TODO - raise exception if missing
-            pass
+            raise(ValidationError(detail={'store_id': ["This field is required"]}))
         store_id = qp['store_id']
         store_conf = models.StoreCapacityConfig.objects.get(store=store_id)
 
@@ -45,7 +45,7 @@ class ReservationSearch(APIView):
         time_to_add = math.ceil(time_till_d / store_conf.timeslot_duration)
         start_search = opening_time + timedelta(minutes=(time_to_add * store_conf.timeslot_duration))
 
-        # Get End time such that 
+        # Get End time such that
         hr_offset = qp.get('offset', 1)
         end_search = start_search + timedelta(hours=hr_offset)
         # TODO - if end time will be when when the store is closed set end date to closing time

@@ -105,8 +105,9 @@ class ReservationViewSet(
 
         qs = models.Reservation.objects.filter(user=requesting_user)
         if 'store' in q_params:
-            qs.filter(store=q_params['store'])
+            qs = qs.filter(store=q_params['store'])
         if 'slot_time__gte' in q_params:
-            print('hit')
-            qs.filter(slot_time__gte=q_params['slot_time__gte'])
+            slot_dt = services.read_dt_str( q_params['slot_time__gte'])
+            qs = qs.filter(slot_time__gte=slot_dt)
+
         return qs

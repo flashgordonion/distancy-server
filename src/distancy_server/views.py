@@ -40,8 +40,12 @@ class ReservationSearch(APIView):
         opening_time = pytz.utc.localize(opening_time)
         start_search = start_search if (start_search > opening_time) else opening_time
 
-        # TODO if set start_search to align with slots Use Ceiling of the slot so people don't miss their reservation
+        # Use Ceiling of the slot so people don't miss their reservation
+        time_till_d = (start_search - opening_time).seconds / 60
+        time_to_add = math.ceil(time_till_d / store_conf.timeslot_duration)
+        start_search = opening_time + timedelta(minutes=(time_to_add * store_conf.timeslot_duration))
 
+        # Get End time such that 
         hr_offset = qp.get('offset', 1)
         end_search = start_search + timedelta(hours=hr_offset)
         # TODO - if end time will be when when the store is closed set end date to closing time
@@ -65,7 +69,7 @@ class ReservationSearch(APIView):
             slots.append({
                 "taken": res_slot_len,
                 "maximum": store_conf.reservation_capacity,
-                "arriv_after": start,
+                "arrive_after": start,
                 "arrive_before": stop
             })
 

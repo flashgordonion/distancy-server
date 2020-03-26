@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from distancy_server import serializers
 from distancy_server import models
 from datetime import datetime, timedelta
+from distancy_server import services
 import pytz
 import math
 
@@ -22,18 +23,10 @@ class ReservationSearch(APIView):
         store_id = qp['store_id']
         store_conf = models.StoreCapacityConfig.objects.get(store=store_id)
 
-        def clean_srt_tz(string: str):
-            if string[-1] == 'Z':
-                string = string[:-1]
-                string = string + '+00:00'
-            return string
-
         # Initially set start date to specified timerange
-        # I do this because I'm having trouble parsing iso 8601 with 'Z'
-        search_date_initial = qp.get('search_date', datetime.utcnow().isoformat())
-        search_date_str = clean_srt_tz(search_date_initial)
-        search_datetime = datetime.fromisoformat(search_date_str)
-        start_search = search_datetime
+        start_search = services.read_dt_str(
+            qp.get('search_date', datetime.utcnow().isoformat())
+        )
 
         # Adjust to store opening time if store opening is greater
         opening_time = datetime.combine(start_search.date(), store_conf.opening_time)
@@ -108,5 +101,12 @@ class ReservationViewSet(
 
     def get_queryset(self):
         requesting_user = self.request.user
+        q_params = self.request.query_params
+
         qs = models.Reservation.objects.filter(user=requesting_user)
+        if 'store' in q_params:
+            qs.filter(store=q_params['store'])
+        if 'slot_time__gte' in q_params:
+            print('hit')
+            qs.filter(slot_time__gte=q_params['slot_time__gte'])
         return qs

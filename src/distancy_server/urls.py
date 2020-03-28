@@ -30,7 +30,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^api-token-auth/', auth_views.obtain_auth_token),
     url(r'^api-token-verification/', views.TokenValidationView.as_view()),
-    url(r'^searchReservations/', views.ReservationSearch.as_view())
+    url(r'^register/', views.UserRegistrationView.as_view()),
+    url(r'^searchReservations/', views.ReservationSearch.as_view()),
 ]
 
 urlpatterns.extend(router.urls)

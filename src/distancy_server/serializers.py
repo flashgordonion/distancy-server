@@ -1,14 +1,27 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from rest_framework.authtoken.models import Token
 from distancy_server import models
-from datetime import timedelta, datetime
+from datetime import datetime
 import pytz
 
 
 class UserSerializer(serializers.ModelSerializer):
+
+    def create(self, validated_data):
+        user = models.User(**validated_data)
+        user.set_password(validated_data['password'])
+        user.save()
+        Token.objects.get_or_create(user=user)
+        return user
+
     class Meta:
         model = models.User
-        fields = ['username']
+        fields = ['username', 'email', 'password', 'auth_token']
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'auth_token': {'read_only': True}
+        }
 
 
 class StoreSerializer(serializers.ModelSerializer):

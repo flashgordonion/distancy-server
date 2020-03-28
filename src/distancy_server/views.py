@@ -68,11 +68,21 @@ class ReservationSearch(APIView):
         return Response({"slots": slots})
 
 
+class UserRegistrationView(APIView):
+
+    def post(self, request, format=None):
+
+        serializer = serializers.UserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
+
+
 class TokenValidationView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
-
         user = request.user
         user_data = serializers.UserSerializer(user).data
         return Response(user_data)

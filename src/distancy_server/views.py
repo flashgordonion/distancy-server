@@ -52,12 +52,11 @@ class ReservationSearch(APIView):
                 yield arrival_start, arrival_end
             pass
 
-        print(end_search)
         slots = []
         for idx, (start, stop) in enumerate(getslots(start_search, end_search, store_conf.timeslot_duration)):
             res_slots = models.Reservation.objects \
                 .filter(store=store_id) \
-                .filter(slot_time__gt=start, slot_time__lte=stop)
+                .filter(slot_time=start)
             res_slot_len = len(res_slots)
             slots.append({
                 "taken": res_slot_len,
